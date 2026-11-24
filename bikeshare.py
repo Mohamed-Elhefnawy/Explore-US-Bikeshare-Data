@@ -8,6 +8,11 @@ CITY_DATA = { 'chicago': 'chicago.csv',
 
 
 def get_filters():
+    """Asks the user for a city, month and day to analyze.
+
+    Returns:
+        (str) city, (str) month, (str) day (use 'all' for no month/day filter)
+    """
 
     print('Hello! Let\'s explore some US bikeshare data!')
     
@@ -45,6 +50,7 @@ def get_filters():
 
 
 def load_data(city, month, day):
+    """Loads data for the city and filters by month and day if applicable."""
 
     # loading data file into a dataframe
     df = pd.read_csv(CITY_DATA[city])
@@ -54,7 +60,7 @@ def load_data(city, month, day):
 
     # extracting month and day of week from Start Time to create new columns
     df['month'] = df['Start Time'].dt.month
-    df['day_of_week'] = df['Start Time'].dt.weekday_name
+    df['day_of_week'] = df['Start Time'].dt.day_name()
     df['hour'] = df['Start Time'].dt.hour
 
     # filtering by month if applicable
@@ -161,7 +167,7 @@ def user_stats(df):
         counts_of_gender = df['Gender'].value_counts()
         print("Gender counts are:")
         print(counts_of_gender)
-    except:
+    except KeyError:
         print("Gender column not found")
     
     # Displaying earliest, most recent, and most common year of birth
@@ -175,7 +181,7 @@ def user_stats(df):
     
         common_birth_year = df['Birth Year'].mode()[0]
         print("The most common birth year is: " ,int(common_birth_year))
-    except:
+    except KeyError:
         print("Birth year column not found")
     
     
@@ -185,6 +191,7 @@ def user_stats(df):
     
     
 def display_raw_data(df):
+    """Shows the raw rows 5 at a time on request."""
     print("Raw data is here")
     i = 0
     raw = input("Do you want to show 5 rows of it ? ('yes','no')").lower()
@@ -202,6 +209,7 @@ def display_raw_data(df):
     
     
 def main():
+    """Runs the interactive loop."""
     while True:
         city, month, day = get_filters()
         df = load_data(city, month, day)
@@ -226,4 +234,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+    main()
